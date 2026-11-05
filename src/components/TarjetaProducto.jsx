@@ -1,10 +1,12 @@
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ProductosContext } from '../context/ProductosContext';
 import { useCount } from '../hooks/useCount';
 
 export function TarjetaProducto({ producto }) {
   const { eliminarProducto } = useContext(ProductosContext);
   const { count, increment, decrement } = useCount(1, 1, 10);
+  const navigate = useNavigate();
 
   return (
     <div className="col-md-4 mb-4">
@@ -30,12 +32,20 @@ export function TarjetaProducto({ producto }) {
               <button className="btn btn-sm btn-outline-secondary" onClick={increment}>+</button>
             </div>
             
-            <button 
-              className="btn btn-danger btn-sm w-100" 
-              onClick={() => eliminarProducto(producto.id)}
-            >
-              Eliminar
-            </button>
+            <div className="d-flex gap-2">
+              <button 
+                className="btn btn-warning btn-sm w-50 text-white fw-bold" 
+                onClick={() => navigate(`/editar/${producto.id}`)}
+              >
+                Editar
+              </button>
+              <button 
+                className="btn btn-danger btn-sm w-50" 
+                onClick={() => eliminarProducto(producto.id)}
+              >
+                Eliminar
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -5,18 +5,16 @@ export const ProductosContext = createContext();
 
 const API_URL = 'https://jsonplaceholder.typicode.com/posts';
 
-
 const MIS_IMAGENES = [
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaIviQx7yWozJosB5dh7VmQyAyXIz4FtCLDdsKnPmP2g&s=10', // 1. Leche
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREUjsxY4psB5LLl1Talba449WewaCEpiv6v_iPTnDzyA&s',    // 2. Coca Cola
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1Ji9mEXYq2CARV3TH4iJJlZ0bw-qLfT45E6LK0lvogQ&s=10', // 3. Sabritas
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9FBnTfvFirJIx-9F3H6Z7peoxQVbuPInjYE3h5LaGBQ&s=10'  // 4. Pan Blanco
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaIviQx7yWozJosB5dh7VmQyAyXIz4FtCLDdsKnPmP2g&s=10', 
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREUjsxY4psB5LLl1Talba449WewaCEpiv6v_iPTnDzyA&s',    
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1Ji9mEXYq2CARV3TH4iJJlZ0bw-qLfT45E6LK0lvogQ&s=10', 
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9FBnTfvFirJIx-9F3H6Z7peoxQVbuPInjYE3h5LaGBQ&s=10'  
 ];
 
 export function ProductosProvider({ children }) {
   const [state, dispatch] = useReducer(productosReducer, initialState);
 
- 
   useEffect(() => {
     const obtenerProductos = async () => {
       const productosGuardados = localStorage.getItem('productos_pwa');
@@ -58,14 +56,32 @@ export function ProductosProvider({ children }) {
 
       const productoFinal = {
         ...nuevoProducto,
-        id: Date.now(), 
+        id: Date.now(),
         imagen: nuevoProducto.imagen || ''
       };
 
       const listaActualizada = [...state.productos, productoFinal];
-      
       localStorage.setItem('productos_pwa', JSON.stringify(listaActualizada));
       dispatch({ type: 'AGREGAR_PRODUCTO', payload: productoFinal });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const editarProducto = async (productoEditado) => {
+    try {
+      await fetch(`${API_URL}/${productoEditado.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(productoEditado),
+      });
+
+      const listaActualizada = state.productos.map((p) =>
+        p.id === productoEditado.id ? productoEditado : p
+      );
+
+      localStorage.setItem('productos_pwa', JSON.stringify(listaActualizada));
+      dispatch({ type: 'EDITAR_PRODUCTO', payload: productoEditado });
     } catch (e) {
       console.error(e);
     }
@@ -74,7 +90,6 @@ export function ProductosProvider({ children }) {
   const eliminarProducto = async (id) => {
     try {
       await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-      
       const listaActualizada = state.productos.filter((p) => p.id !== id);
       
       localStorage.setItem('productos_pwa', JSON.stringify(listaActualizada));
@@ -85,7 +100,7 @@ export function ProductosProvider({ children }) {
   };
 
   return (
-    <ProductosContext.Provider value={{ state, dispatch, agregarProducto, eliminarProducto }}>
+    <ProductosContext.Provider value={{ state, dispatch, agregarProducto, editarProducto, eliminarProducto }}>
       {children}
     </ProductosContext.Provider>
   );

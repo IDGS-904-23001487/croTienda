@@ -34,6 +34,14 @@ export default function App() {
             </RutaProtegida>
           } 
         />
+        <Route 
+          path="/editar/:id" 
+          element={
+            <RutaProtegida>
+              <FormularioPage />
+            </RutaProtegida>
+          } 
+        />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </div>

@@ -1,13 +1,30 @@
-import { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useContext } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ProductosContext } from '../context/ProductosContext';
 
 export function FormularioPage() {
-  const { agregarProducto } = useContext(ProductosContext);
+  const { state, agregarProducto, editarProducto } = useContext(ProductosContext);
   const navigate = useNavigate();
+  const { id } = useParams();
 
-  const [form, setForm] = useState({ nombre: '', precio: '', categoria: 'Abarrotes' });
+  const [form, setForm] = useState({ nombre: '', precio: '', categoria: 'Abarrotes', imagen: '' });
   const [errores, setErrores] = useState({});
+  const esEdicion = Boolean(id);
+
+  useEffect(() => {
+    if (esEdicion) {
+      const productoAEditar = state.productos.find((p) => String(p.id) === String(id));
+      if (productoAEditar) {
+        const precioLimpio = productoAEditar.precio.replace('$', '');
+        setForm({
+          nombre: productoAEditar.nombre,
+          precio: precioLimpio,
+          categoria: productoAEditar.categoria,
+          imagen: productoAEditar.imagen
+        });
+      }
+    }
+  }, [id, state.productos, esEdicion]);
 
   const validar = () => {
     let err = {};
@@ -22,12 +39,19 @@ export function FormularioPage() {
     e.preventDefault();
     const err = validar();
     if (Object.keys(err).length === 0) {
-      agregarProducto({
+      const datosProducto = {
         nombre: form.nombre,
         precio: `$${parseFloat(form.precio).toFixed(2)}`,
         categoria: form.categoria,
-        imagen: ''
-      });
+        imagen: form.imagen.trim() !== '' ? form.imagen : ''
+      };
+
+      if (esEdicion) {
+        editarProducto({ ...datosProducto, id: Number(id) || id });
+      } else {
+        agregarProducto(datosProducto);
+      }
+
       navigate('/');
     } else {
       setErrores(err);
@@ -37,7 +61,9 @@ export function FormularioPage() {
   return (
     <div className="container mt-4" style={{ maxWidth: '500px' }}>
       <div className="card shadow border-0 p-4">
-        <h4 className="mb-3 text-success fw-bold">Agregar Producto</h4>
+        <h4 className="mb-3 text-success fw-bold">
+          {esEdicion ? 'Editar Producto' : 'Agregar Producto'}
+        </h4>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label className="form-label">Nombre del Producto</label>
@@ -72,11 +98,25 @@ export function FormularioPage() {
               <option value="Abarrotes">Abarrotes</option>
               <option value="Lácteos">Lácteos</option>
               <option value="Bebidas">Bebidas</option>
+              <option value="Botanas">Botanas</option>
               <option value="Panadería">Panadería</option>
             </select>
           </div>
 
-          <button type="submit" className="btn btn-success w-100">Guardar Producto</button>
+          <div className="mb-3">
+            <label className="form-label">URL de la Imagen</label>
+            <input 
+              type="url" 
+              className="form-control"
+              placeholder="https://ejemplo.com/imagen.jpg"
+              value={form.imagen}
+              onChange={(e) => setForm({ ...form, imagen: e.target.value })}
+            />
+          </div>
+
+          <button type="submit" className="btn btn-success w-100">
+            {esEdicion ? 'Guardar Cambios' : 'Guardar Producto'}
+          </button>
         </form>
       </div>
     </div>
