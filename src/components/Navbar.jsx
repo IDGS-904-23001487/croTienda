@@ -18,13 +18,13 @@ export function Navbar() {
         <div className="d-flex align-items-center gap-3">
           {usuario ? (
             <>
-              <Link className="btn btn-outline-light btn-sm" to="/">Catálogo</Link>
+              <Link className="btn btn-outline-light btn-sm" to="/">Catalogo</Link>
               <Link className="btn btn-outline-light btn-sm" to="/nuevo">Nuevo Producto</Link>
               <span className="text-white small">Hola, <strong>{usuario.nombre}</strong></span>
               <button onClick={handleLogout} className="btn btn-danger btn-sm">Salir</button>
             </>
           ) : (
-            <Link className="btn btn-light btn-sm" to="/login">Iniciar Sesión</Link>
+            <Link className="btn btn-light btn-sm" to="/login">Iniciar Sesion</Link>
           )}
         </div>
       </div>
