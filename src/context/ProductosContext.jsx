@@ -33,7 +33,7 @@ export function ProductosProvider({ children }) {
             nombre: index === 0 ? 'Leche' : index === 1 ? 'Coca Cola' : index === 2 ? 'Sabritas' : 'Pan Blanco',
             precio: `$${(index + 1) * 15}.00`,
             categoria: index === 0 ? 'Lácteos' : index === 1 ? 'Bebidas' : index === 2 ? 'Botanas' : 'Panadería',
-            imagen: MIS_IMAGENES[index] || 'https://via.placeholder.com/150'
+            imagen: MIS_IMAGENES[index] || ''
           }));
 
           localStorage.setItem('productos_pwa', JSON.stringify(formateados));
@@ -59,7 +59,7 @@ export function ProductosProvider({ children }) {
       const productoFinal = {
         ...nuevoProducto,
         id: Date.now(), 
-        imagen: nuevoProducto.imagen || 'https://via.placeholder.com/150'
+        imagen: nuevoProducto.imagen || ''
       };
 
       const listaActualizada = [...state.productos, productoFinal];

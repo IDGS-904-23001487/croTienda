@@ -27,7 +27,7 @@ export function CatalogoPage() {
   return (
     <div className="container">
       {}
-      <banner-oferta texto="¡Arovecha 20% de descuento en Lácteos esta semana!" />
+      <banner-oferta texto="APROVECHA El buen fin, EL SOL MERECE TU CONFIANZA" />
 
       {cargandoConPausa || state.cargando ? (
         <div className="text-center my-5 py-5">

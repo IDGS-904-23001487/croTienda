@@ -26,7 +26,7 @@ export function FormularioPage() {
         nombre: form.nombre,
         precio: `$${parseFloat(form.precio).toFixed(2)}`,
         categoria: form.categoria,
-        imagen: 'https://via.placeholder.com/150'
+        imagen: ''
       });
       navigate('/');
     } else {

@@ -27,8 +27,9 @@ export function LoginPage() {
               className="form-control" 
               value={nombre} 
               onChange={(e) => setNombre(e.target.value)} 
-              placeholder="Ej. Juan Pérez"
+              placeholder=""
               required 
+              
             />
           </div>
           <button type="submit" className="btn btn-success w-100">Ingresar</button>
