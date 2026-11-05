@@ -32,7 +32,7 @@ export function CatalogoPage() {
 
   return (
     <div className="container">
-      <banner-oferta texto="¡Aprovecha 20% de descuento en Lácteos esta semana!" />
+      <banner-oferta texto="APROVECHA EL BUEN FIN, DEL SOL MERECE TU CONFIANZA" />
 
       {}
       <div className="row mb-4">

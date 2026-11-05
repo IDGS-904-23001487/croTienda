@@ -9,7 +9,7 @@ class BannerOferta extends HTMLElement {
     this.shadowRoot.innerHTML = `
       <style>
         .banner {
-          background: linear-gradient(90deg, #198754, #20c997);
+          background: linear-gradient(90deg, #931de7, #ad1def);
           color: white;
           padding: 12px;
           text-align: center;
